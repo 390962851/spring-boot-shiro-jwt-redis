@@ -1,5 +1,7 @@
 # sping-boot-shiro-jwt-redis
 
+> 本项目是一个用来学习的demo，后端代码和数据 都在文件中，前端代码请查看[动态路由 test_03](https://github.com/390962851/test_03/tree/master/test_03)
+
 ## 一、前言
 在微服务中我们一般采用的是无状态登录，而传统的session方式，在前后端分离的微服务架构下，如继续使用则必将要解决跨域sessionId问题、集群session共享问题等等。这显然是费力不讨好的，而整合shiro，却很不恰巧的与我们的期望有所违背：
 
