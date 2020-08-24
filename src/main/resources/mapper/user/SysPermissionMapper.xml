@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.github.user.mapper.SysPermissionMapper">
+
+    <!-- 获取登录用户拥有的权限 -->
+    <select id="queryByUser" parameterType="Object" resultType="cn.github.user.entity.SysPermission">
+		SELECT p.*
+		FROM sys_permission p
+		WHERE exists(
+			select a.id from sys_role_permission a
+			join sys_role b on a.role_id = b.id
+			join sys_user_role c on c.role_id = b.id
+			join sys_user d on d.id = c.user_id
+			where p.id = a.permission_id AND d.user_name = #{username,jdbcType=VARCHAR}
+		)
+		and p.del_flag = 0
+		order by p.sort_no ASC
+	</select>
+	
+	<!-- 获取登录用户所拥有的菜单 -->
+	<resultMap id="resultMapMenu" type="cn.github.user.entity.view.MenuV">
+		<id property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="url" column="url"/>
+		<result property="perms" column="perms"/>
+		<result property="icon" column="icon"/>
+	</resultMap>
+	<select id="getUserMenu" resultType="cn.github.user.entity.view.MenuV">
+		SELECT p.id,p.name,p.url,p.perms,p.icon
+		FROM sys_permission p
+		WHERE exists(
+			select a.id from sys_role_permission a
+			join sys_role b on a.role_id = b.id
+			join sys_user_role c on c.role_id = b.id
+			join sys_user d on d.id = c.user_id
+			where p.id = a.permission_id AND d.user_name = #{username,jdbcType=VARCHAR}
+		)
+		and p.del_flag = 0 and p.is_route = 1
+		order by p.sort_no ASC
+	</select>
+	<!-- 获取登录用户所拥有的子菜单 -->
+	<select id="getUserMenuSecond" resultType="cn.github.user.entity.view.MenuSecV">
+		SELECT p1.id,p1.parent_id,p1.component_name,p1.component,p1.icon,p1.perms
+		FROM sys_permission p1
+		WHERE p1.parent_id in (
+			SELECT p.id
+			FROM  sys_permission p
+			WHERE exists(
+				select a.id from sys_role_permission a
+				join sys_role b on a.role_id = b.id
+				join sys_user_role c on c.role_id = b.id
+				join sys_user d on d.id = c.user_id
+				where p.id = a.permission_id AND d.user_name = #{username,jdbcType=VARCHAR} AND p.is_route = 1
+			)
+		)
+		and p1.del_flag = 0
+		order by p1.sort_no ASC
+	</select>
+
+</mapper>

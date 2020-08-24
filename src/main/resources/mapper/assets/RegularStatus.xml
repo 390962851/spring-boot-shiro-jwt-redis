@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.github.assets.mapper.RegularStatusMapper">
+    <resultMap id="BaseResultMap" type="cn.github.assets.entity.RegularStatus">
+        <id property="id" column="status_id" />
+        <result property="name" column="status_name" />
+        <result property="dateTime" column="date_time" />
+    </resultMap>
+
+    <select id="findById" parameterType="int" resultMap="BaseResultMap">
+        select * from regular_status where status_id = #{id}
+    </select>
+
+    <select id="getAllStatus" resultMap="BaseResultMap" >
+        select * from regular_status
+    </select>
+
+    <select id="findByName" parameterType="String" resultMap="BaseResultMap">
+        select * from regular_status where status_name = #{name}
+    </select>
+
+</mapper>

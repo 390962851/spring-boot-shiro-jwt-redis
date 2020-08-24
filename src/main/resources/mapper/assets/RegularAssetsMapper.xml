@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.github.assets.mapper.RegularAssetMapper">
+
+    <resultMap id="BaseResultMap" type="cn.github.assets.entity.RegularAssets">
+        <id property="id" column="id"/>
+        <result property="assetsName" column="assets_name"/>
+        <result property="assetsType" column="assets_type"/>
+        <result property="type" column="type"/>
+        <result property="unit" column="unit"/>
+        <result property="quantity" column="quantity"/>
+        <result property="storageDate" column="storage_date"/>
+        <result property="recipients" column="recipients"/>
+        <result property="assetsValue" column="assets_value"/>
+        <result property="depreciationRate" column="depreciation_rate"/>
+        <result property="depreciationPeriod" column="depreciation_period"/>
+        <result property="depreciatedDate" column="depreciated_date"/>
+        <result property="depreciationMonth" column="depreciation_month"/>
+        <result property="depreciationAcc" column="depreciation_acc"/>
+        <result property="assetNetValue" column="asset_net_value"/>
+        <result property="storageLoca" column="storage_loca"/>
+        <result property="status" column="status"/>
+        <result property="statusDate" column="status_date"/>
+        <result property="remarks" column="remarks"/>
+    </resultMap>
+
+    <select id="getAllAssets" resultMap="BaseResultMap">
+        select * from regular_assets
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        select * from regular_assets where id = #{id}
+    </select>
+
+    <insert id="addOne">
+        insert into regular_assets(
+        assets_name,
+        assets_type,
+        type,
+        unit,
+        quantity,
+        storage_date,
+        recipients,
+        assets_value,
+        depreciation_rate,
+        depreciation_period,
+        depreciated_date,
+        depreciation_month,
+        depreciation_acc,
+        asset_net_value,
+        storage_loca,
+        status,
+        status_date,
+        remarks
+        )values(
+        #{assetsName},
+        #{assetsType},
+        #{type},
+        #{unit},
+        #{quantity},
+        #{storageDate},
+        #{recipients},
+        #{assetsValue},
+        #{depreciationRate},
+        #{depreciationPeriod},
+        #{depreciatedDate},
+        #{depreciationMonth},
+        #{depreciationAcc},
+        #{assetNetValue},
+        #{storageLoca},
+        #{status},
+        #{statusDate},
+        #{remarks}
+        )
+    </insert>
+
+    <update id="updateDate">
+        update regular_assets set
+        assets_name = #{assetsName},
+        assets_type = #{assetsType},
+        type = #{type},
+        unit = #{unit},
+        quantity = #{quantity},
+        storage_date = #{storageDate},
+        recipients = #{recipients},
+        assets_value = #{assetsValue},
+        depreciation_rate = #{depreciationRate},
+        depreciation_period = #{depreciationPeriod},
+        depreciated_date = #{depreciatedDate},
+        depreciation_month = #{depreciationMonth},
+        depreciation_acc = #{depreciationAcc},
+        asset_net_value = #{assetNetValue},
+        storage_loca = #{storageLoca},
+        status = #{status},
+        status_date = #{statusDate},
+        remarks = #{remarks}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        delete from regular_assets where id = #{id}
+    </delete>
+
+
+    <resultMap id="BaseResultView" type="cn.github.assets.entity.view.RegularStatusView">
+        <id property="id" column="id"/>
+        <result property="assetsName" column="assets_name"/>
+        <result property="assetsType" column="assets_type"/>
+        <result property="type" column="type"/>
+        <result property="unit" column="unit"/>
+        <result property="quantity" column="quantity"/>
+        <result property="storageDate" column="storage_date"/>
+        <result property="recipients" column="recipients"/>
+        <result property="assetsValue" column="assets_value"/>
+        <result property="depreciationRate" column="depreciation_rate"/>
+        <result property="depreciationPeriod" column="depreciation_period"/>
+        <result property="depreciatedDate" column="depreciated_date"/>
+        <result property="depreciationMonth" column="depreciation_month"/>
+        <result property="depreciationAcc" column="depreciation_acc"/>
+        <result property="assetNetValue" column="asset_net_value"/>
+        <result property="storageLoca" column="storage_loca"/>
+        <result property="status" column="status"/>
+        <result property="statusDate" column="status_date"/>
+        <result property="remarks" column="remarks"/>
+        <!--常用于多对一-->
+        <!--collection对应一个list集合-->
+        <!--property="regular_status" 表示RegularStatusView对象里面的一个集合的名字-->
+        <!--ofType="com.demo.springbootmybatis.entity.RegularStatus" 集合里面对象的类型-->
+        <collection property="regular_status" ofType="RegularStatus">
+            <id property="id" column="status_id"/>
+            <result property="name" column="status_name"/>
+            <result property="dateTime" column="date_time"/>
+        </collection>
+
+        <!--一个对象里面对应一个......对象-->
+<!--        <association property="sss" javaType="com.demo.springbootmybatis....">-->
+<!--            <id property="" column="" jdbcType="int"/>-->
+<!--            <result property="" column="" jdbcType="VARCHAR"/>-->
+<!--        </association>-->
+    </resultMap>
+
+    <select id="findByName" resultMap="BaseResultView">
+        SELECT * FROM regular_assets a
+        left JOIN regular_status b on a.status = b.status_id where a.assets_name LIKE CONCAT('%',#{name},'%')
+    </select>
+
+    <select id="selAll" resultMap="BaseResultView">
+        SELECT a.id,a.assets_name,a.assets_type,a.assets_value,a.asset_net_value,
+        a.depreciated_date,a.depreciation_acc,a.depreciation_month,a.depreciation_period,
+        a.depreciation_rate,a.type,a.unit,a.storage_date,a.storage_loca,a.quantity,a.recipients,
+        a.remarks,a.status,a.status_date,
+        b.status_id,b.status_name,b.date_time FROM regular_assets a
+        left JOIN regular_status b on a.status = b.status_id LIMIT #{current},#{pageSize}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT count(*) FROM regular_assets
+    </select>
+</mapper>

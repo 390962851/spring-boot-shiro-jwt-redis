@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.github.assets.mapper.InvisiableAssetMapper">
+
+    <resultMap id="BaseResultMap" type="cn.github.assets.entity.InvisiableAssets">
+        <id property="id" column="id"/>
+        <result property="assetsName" column="assets_name"/>
+        <result property="assetsType" column="assets_type"/>
+        <result property="storageDate" column="storage_date"/>
+        <result property="assetsValue" column="assets_value"/>
+        <result property="depreciationRate" column="depreciation_rate"/>
+        <result property="depreciationPeriod" column="depreciation_period"/>
+        <result property="depreciatedDate" column="depreciated_date"/>
+        <result property="depreciationMonth" column="depreciation_month"/>
+        <result property="depreciationAcc" column="depreciation_acc"/>
+        <result property="assetNetValue" column="asset_net_value"/>
+        <result property="storageLoca" column="storage_loca"/>
+        <result property="status" column="status"/>
+        <result property="statusDate" column="status_date"/>
+        <result property="remarks" column="remarks"/>
+    </resultMap>
+
+    <select id="getAllAssets" resultMap="BaseResultMap">
+        select * from invisiable_assets
+    </select>
+
+    <select id="findByPage" resultMap="BaseResultMap">
+        select * from invisiable_assets
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        select * from invisiable_assets where id = #{id}
+    </select>
+
+    <insert id="addOne">
+        insert into invisiable_assets(
+        assets_name,
+        assets_type,
+        storage_date,
+        assets_value,
+        depreciation_rate,
+        depreciation_period,
+        depreciated_date,
+        depreciation_month,
+        depreciation_acc,
+        asset_net_value,
+        storage_loca,
+        status,
+        status_date,
+        remarks
+        )values(
+        #{assetsName},
+        #{assetsType},
+        #{storageDate},
+        #{assetsValue},
+        #{depreciationRate},
+        #{depreciationPeriod},
+        #{depreciatedDate},
+        #{depreciationMonth},
+        #{depreciationAcc},
+        #{assetNetValue},
+        #{storageLoca},
+        #{status},
+        #{statusDate},
+        #{remarks}
+        )
+    </insert>
+
+    <update id="updateDate">
+        update invisiable_assets set
+        assets_name = #{assetsName},
+        assets_type = #{assetsType},
+        storage_date = #{storageDate},
+        assets_value = #{assetsValue},
+        depreciation_rate = #{depreciationRate},
+        depreciation_period = #{depreciationPeriod},
+        depreciated_date = #{depreciatedDate},
+        depreciation_month = #{depreciationMonth},
+        depreciation_acc = #{depreciationAcc},
+        asset_net_value = #{assetNetValue},
+        storage_loca = #{storageLoca},
+        status = #{status},
+        status_date = #{statusDate},
+        remarks = #{remarks}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        delete from invisiable_assets where id = #{id}
+    </delete>
+
+
+    <resultMap id="BaseResultView" type="cn.github.assets.entity.view.InvisiableStatusView">
+        <id property="id" column="id"/>
+        <result property="assetsName" column="assets_name"/>
+        <result property="assetsType" column="assets_type"/>
+        <result property="storageDate" column="storage_date"/>
+        <result property="assetsValue" column="assets_value"/>
+        <result property="depreciationRate" column="depreciation_rate"/>
+        <result property="depreciationPeriod" column="depreciation_period"/>
+        <result property="depreciatedDate" column="depreciated_date"/>
+        <result property="depreciationMonth" column="depreciation_month"/>
+        <result property="depreciationAcc" column="depreciation_acc"/>
+        <result property="assetNetValue" column="asset_net_value"/>
+        <result property="storageLoca" column="storage_loca"/>
+        <result property="status" column="status"/>
+        <result property="statusDate" column="status_date"/>
+        <result property="remarks" column="remarks"/>
+        <collection property="regular_status" ofType="RegularStatus">
+            <id property="id" column="status_id"/>
+            <result property="name" column="status_name"/>
+            <result property="dateTime" column="date_time"/>
+        </collection>
+    </resultMap>
+
+    <select id="findByName" resultMap="BaseResultView">
+        SELECT * FROM invisiable_assets a
+        left JOIN regular_status b on a.status = b.status_id where a.assets_name LIKE CONCAT('%',#{name},'%')
+    </select>
+
+    <select id="selAll" resultMap="BaseResultView">
+        SELECT a.id,a.assets_name,a.assets_type,a.assets_value,a.asset_net_value,
+        a.depreciated_date,a.depreciation_acc,a.depreciation_month,a.depreciation_period,
+        a.depreciation_rate,a.storage_date,a.storage_loca,
+        a.remarks,a.status,a.status_date,
+        b.status_id,b.status_name,b.date_time FROM invisiable_assets a
+        left JOIN regular_status b on a.status = b.status_id
+    </select>
+</mapper>
