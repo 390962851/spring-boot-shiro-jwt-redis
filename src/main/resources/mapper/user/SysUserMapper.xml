@@ -7,4 +7,20 @@
 		select * from  sys_user  where user_name = #{username} and del_flag = '0'
 	</select>
 
+    <!-- 查询所有 -->
+    <select id="getAllUsers" resultType="cn.github.user.entity.SysUser">
+        select * from sys_user
+        <where>
+            <if test="map.userName !=null and map.userName !='' ">
+                and user_name like concat('%', #{map.userName}, '%')
+            </if>
+            <if test="map.createTime !=null and map.createTime !='' ">
+                and create_time = #{map.createTime}
+            </if>
+            <if test="map.delFlag !=null and map.delFlag !='' ">
+                and del_flag = #{map.delFlag}
+            </if>
+        </where>
+    </select>
+
 </mapper>

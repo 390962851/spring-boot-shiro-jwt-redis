@@ -12,14 +12,14 @@ import cn.github.user.service.ISysUserService;
 import cn.github.util.CommonUtils;
 import cn.github.util.Result;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 用户表 服务实现类
@@ -67,9 +67,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         Set<String> permissionSet = new HashSet<>();
         List<SysPermission> permissionList = sysPermissionMapper.queryByUser(username);
         for (SysPermission po : permissionList) {
-//			if (oConvertUtils.isNotEmpty(po.getUrl())) {
-//				permissionSet.add(po.getUrl());
-//			}
             if (CommonUtils.isNotEmpty(po.getPerms())) {
                 permissionSet.add(po.getPerms());
             }
@@ -127,5 +124,81 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public List<MenuSecV> getUserMenuSecond(String username) {
         return sysPermissionMapper.getUserMenuSecond(username);
+    }
+
+    /**
+     * 分页查询所有用户
+     * @date 2020/8/27
+     * @author Mr.hs
+     * @params
+     * @return
+     */
+    @Override
+    public Result<?> getAllUsers(Map map) {
+        try {
+            if (map.get("pageNo") == null || map.get("pageSize") == null) {
+                return Result.error("分页参数错误!");
+            } else {
+                PageHelper.startPage(Integer.valueOf(map.get("pageNo").toString()),Integer.valueOf(map.get("pageSize").toString()));
+                List<SysUser> list = userMapper.getAllUsers(map);
+                PageInfo<SysUser> pageInfo = new PageInfo<>(list);
+                return Result.ok(pageInfo);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("查询出错!");
+        }
+    }
+
+    /**
+     * 根据条件查询用户
+     * @date 2020/8/27
+     * @author Mr.hs
+     * @params [map]
+     * @return cn.github.util.Result<?>
+     */
+    @Override
+    public Result<?> getUsersByCondition(Map map) {
+        return null;
+    }
+
+    /**
+     * 根据id删除用户
+     * @date 2020/8/27
+     * @author Mr.hs
+     * @params [id]
+     * @return cn.github.util.Result<?>
+     */
+    @Override
+    public int deleteById(String id) {
+        return userMapper.deleteById(id);
+    }
+
+    /**
+     * 更新数据
+     * @date 2020/8/28
+     * @author Mr.hs
+     * @params
+     * @return
+     */
+    @Override
+    public int updateUser(SysUser sysUser) {
+        return userMapper.updateById(sysUser);
+    }
+
+    /**
+     * 添加用户
+     * @date 2020/8/28
+     * @author Mr.hs
+     * @params [sysUser]
+     * @return int
+     */
+    @Override
+    public Result addUser(SysUser sysUser) {
+        if ( this.save(sysUser) ) {
+            return Result.ok("添加成功");
+        } else {
+            return Result.error("添加失败");
+        }
     }
 }

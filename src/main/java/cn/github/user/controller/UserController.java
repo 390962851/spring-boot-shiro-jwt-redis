@@ -1,40 +1,68 @@
 package cn.github.user.controller;
 
+import cn.github.user.entity.SysUser;
+import cn.github.user.service.ISysUserService;
+import cn.github.util.CommonUtils;
+import cn.github.util.PasswordUtil;
 import cn.github.util.Result;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    @RequiresPermissions("user:list")
-    @RequestMapping("list")
-    public Result userList() {
-        return Result.ok("获取用户信息");
-    }
+    @Autowired
+    private ISysUserService iSysUserService;
 
     @RequiresPermissions("user:add")
-    @RequestMapping("add")
-    public Result userAdd() {
-        return Result.ok("新增用户");
+    @PostMapping("/addUser")
+    public Result userAdd(@RequestBody SysUser sysUser) {
+        try {
+            String salt = CommonUtils.randomGen(8);
+            String passwordEncode  = PasswordUtil.encrypt(sysUser.getUserName(),sysUser.getPassWord(),salt);
+            sysUser.setSalt(salt);
+            sysUser.setPassWord(passwordEncode);
+            return iSysUserService.addUser(sysUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error(500,"操作失败");
+        }
     }
 
     @RequiresPermissions("user:delete")
-    @RequestMapping("delete")
-    public Result userDelete() {
-        return Result.ok("删除用户");
+    @DeleteMapping("/userDelete/{id}")
+    public Result userDelete(@PathVariable("id") String id) {
+        if (iSysUserService.deleteById(id) > 0){
+            return Result.ok("删除用户");
+        } else {
+            return Result.error("删除失败");
+        }
     }
 
     @RequiresPermissions("user:update")
-    @RequestMapping("update")
-    public Result userUpdate() {
-        return Result.ok("修改用户");
+    @PostMapping("/userUpdate")
+    public Result userUpdate(@RequestBody SysUser sysUser) {
+
+        System.out.println("sysUser ======== " + sysUser.toString());
+        if (iSysUserService.updateUser(sysUser) > 0) {
+            return Result.ok("修改成功");
+        } else {
+            return Result.error("修改失败");
+        }
+    }
+
+    @PostMapping("/getAllUsers")
+    public Result getAllUsers(@RequestBody Map map){
+        return iSysUserService.getAllUsers(map);
     }
 
     @RequestMapping("test")
     public Result test() {
         return Result.ok("不用登陆直接访问的接口");
     }
+
 }

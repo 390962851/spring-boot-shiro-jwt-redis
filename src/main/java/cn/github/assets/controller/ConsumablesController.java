@@ -76,7 +76,6 @@ public class ConsumablesController {
     /*根据id修改数据*/
     @PostMapping("update")
     public boolean update(@RequestBody Consumables consumables) {
-        System.out.println("update==" + consumables);
         return consumablesMapper.updateDate(consumables);
     }
 
