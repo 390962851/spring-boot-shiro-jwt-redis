@@ -37,24 +37,11 @@
 
     <insert id="addOne">
         insert into consumables(
-        assets_name,
-        type,
-        unit,
-        quantity,
-        prices,
-        storage_date,
-        recipients,
-        remarks
-        )values(
-        #{assetsName},
-        #{type},
-        #{unit},
-        #{quantity},
-        #{prices},
-        #{storageDate},
-        #{recipients},
-        #{remarks}
-        )
+        assets_name,type,unit,quantity,prices,
+        storage_date,recipients,remarks
+        )values(#{assetsName},#{type},#{unit},
+        #{quantity},#{prices},#{storageDate},
+        #{recipients},#{remarks} )
     </insert>
 
     <update id="updateDate">

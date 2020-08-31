@@ -2,10 +2,11 @@ package cn.github;
 
 import cn.github.user.entity.view.MenuSecV;
 import cn.github.user.entity.view.MenuV;
+import cn.github.user.mapper.SysRoleMapper;
+import cn.github.user.service.ISysRoleService;
 import cn.github.user.service.ISysUserService;
 import cn.github.visual.mapper.ViewsMapper;
 import cn.github.visual.service.ViewsService;
-import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,10 @@ public class Tests {
     private ViewsMapper viewsMapper;
     @Autowired
     private ViewsService viewService;
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
+    @Autowired
+    private ISysRoleService sysRoleService;
 
     @Test
     public void aa(){
@@ -65,6 +70,10 @@ public class Tests {
 
     @Test
     public void ee(){
-        JSONObject jsonObject = new JSONObject();
+        Map<String,String> map = new HashMap();
+        map.put("pageNo","1");
+        map.put("pageSize","5");
+//        map.put("roleName", "d");
+        System.out.println("*******= ");
     }
 }
