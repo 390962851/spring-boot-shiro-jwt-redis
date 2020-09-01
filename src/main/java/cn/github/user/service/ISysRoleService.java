@@ -4,6 +4,7 @@ import cn.github.user.entity.SysRole;
 import cn.github.util.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,13 +13,16 @@ import java.util.Map;
 public interface ISysRoleService extends IService<SysRole> {
 
     /**
-     * 获取所有信息
+     * 获取所有信息 分页
      * @date 2020/8/29
      * @author Mr.hs
      * @param map
      * @return cn.github.util.Result
      */
     public Result getAllRoles(Map map);
+
+    /*获取所有*/
+    public List<SysRole> findAllRoles();
 
     /*根据id删除*/
     public Result deleteById(String id);

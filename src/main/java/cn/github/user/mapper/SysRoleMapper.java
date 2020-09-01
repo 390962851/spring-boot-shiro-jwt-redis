@@ -13,9 +13,12 @@ import java.util.Map;
 public interface SysRoleMapper extends BaseMapper<SysRole> {
 
     /**
-     * 获取所有
+     * 获取所有 分页
      * @param map
      * @return
      */
     List<SysRole> getAllRoles(@Param("map")Map map);
+
+    /*获取所有*/
+    List<SysRole> findAllRoles();
 }

@@ -21,9 +21,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     //分页查询所有用户
     List<SysUser> getAllUsers(@Param("map") Map map);
-
-    //编辑用户信息
-    //添加用户
-    //删除用户
+    
 
 }

@@ -16,7 +16,7 @@ public class RoleController {
     private ISysRoleService sysRoleService;
 
     /**
-     * 获取所有角色信息
+     * 获取所有角色信息 分页
      * @date 2020/8/29
      * @author Mr.hs
      * @param map
@@ -25,6 +25,12 @@ public class RoleController {
     @PostMapping("/getAllRoles")
     public Result<?> getAllRoles(@RequestBody Map map){
         return sysRoleService.getAllRoles(map);
+    }
+
+    /*获取所有角色信息*/
+    @GetMapping("/findAllRoles")
+    public Result<?> findAllRoles(){
+        return Result.ok(sysRoleService.findAllRoles());
     }
 
     /* *

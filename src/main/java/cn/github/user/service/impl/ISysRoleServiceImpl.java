@@ -44,6 +44,12 @@ public class ISysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> imp
         }
     }
 
+    /*获取所有*/
+    @Override
+    public List<SysRole> findAllRoles() {
+        return sysRoleMapper.findAllRoles();
+    }
+
     /**
      * 根据id删除
      * @date 2020/8/29

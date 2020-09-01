@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.github.user.mapper.SysUserRoleMapper">
+    <!--根据用户名获取用户角色id-->
+   <select id="getRoleByUserName" resultType="String">
+        select id from sys_role where id in (
+            select role_id from sys_user_role
+            where user_id = (select id from sys_user where user_name=#{username})
+        )
+   </select>
+
+    <!--根据用户id获取当前用户下拥有的角色-->
+    <select id="getRolesByUserId" resultType="String">
+        SELECT a.role_name FROM sys_role a
+        INNER JOIN sys_user_role b ON a.id = b.role_id and b.user_id=#{id}
+    </select>
+
+    <!--删除一条信息-->
+    <delete id="deleteUserRole">
+        DELETE FROM sys_user_role
+        WHERE user_id = #{map.userId} AND role_id = #{map.roleId}
+    </delete>
+
+</mapper>
