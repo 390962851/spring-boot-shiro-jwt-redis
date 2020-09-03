@@ -28,4 +28,11 @@ public interface SysPermissionMapper extends BaseMapper<SysPermission> {
      */
     public List<MenuSecV> getUserMenuSecond(String username);
 
+    /*获取所有一级菜单列表*/
+    public List<MenuV> getAllFirstPermission();
+
+    /*获取所有二级菜单*/
+    public List<MenuSecV> getAllSecPermission();
+
+
 }

@@ -1,9 +1,6 @@
 package cn.github.user.entity.view;
 
 import lombok.Data;
-import org.apache.poi.ss.formula.functions.T;
-
-import java.util.List;
 
 /* *
  * 导航栏二级菜单列表展示
@@ -18,9 +15,15 @@ public class MenuSecV {
 
     private String id;
     private String parentId;
-    private String componentName;
-//    private String component;
+    private String name;
     private String component;
+    private String url;
+    private String perms;
+    private Integer sortNo;
     private String icon;
-    private List<T> rights;
+    /**
+     * 是否叶子节点:    1:是   0:不是
+     */
+    private Integer isLeaf;
+    private Integer delFlag; //是否删除
 }

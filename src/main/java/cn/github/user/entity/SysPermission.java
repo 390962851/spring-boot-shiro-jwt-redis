@@ -20,7 +20,7 @@ public class SysPermission implements Serializable {
     /**
      * id
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ID_WORKER_STR)
     private String id;
 
     /**
@@ -72,6 +72,11 @@ public class SysPermission implements Serializable {
      * 是否路由菜单: 0:不是  1:是（默认值1）
      */
     private Integer isRoute;
+
+    /**
+     * 是否叶子节点:    1:是   0:不是
+     */
+    private Integer isLeaf;
 
     /**
      * 菜单排序

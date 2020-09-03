@@ -1,4 +1,4 @@
-package cn.github.user.service.impl;
+package cn.github.user.service.Impl;
 
 import cn.github.user.entity.SysUserRole;
 import cn.github.user.mapper.SysUserRoleMapper;

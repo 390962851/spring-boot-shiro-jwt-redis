@@ -1,4 +1,4 @@
-package cn.github.user.service.impl;
+package cn.github.user.service.Impl;
 
 import cn.github.user.entity.SysRole;
 import cn.github.user.mapper.SysRoleMapper;
@@ -33,8 +33,8 @@ public class ISysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> imp
             if (CommonUtils.isEmpty(map.get("pageNo")) || CommonUtils.isEmpty(map.get("pageSize"))) {
                 return Result.error("分页参数错误!");
             } else {
-                PageHelper.startPage(Integer.valueOf(map.get("pageNo").toString()), Integer.valueOf(map.get("pageSize").toString()));
                 List<SysRole> list = sysRoleMapper.getAllRoles(map);
+                PageHelper.startPage(Integer.valueOf(map.get("pageNo").toString()), Integer.valueOf(map.get("pageSize").toString()));
                 PageInfo<SysRole> pageInfo = new PageInfo<>(list);
                 return Result.ok(pageInfo);
             }
